@@ -15,7 +15,7 @@ const Index = () => {
     setTimeout(() => {
       // For demonstration, we pretend that the formula is always 'x * 2'
       // Simulating multiple formulas found
-      setFormulas(["x * 2", "x + 2", "2x - 1"]);
+      setFormulas(["x * 2", "x + 2", "2x - 1", "sin(x)", "cos(x)", "x^2", "e^x"]);
       setIsSearching(false);
       toast({
         title: "Formula found.",
