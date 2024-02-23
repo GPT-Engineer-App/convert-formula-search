@@ -6,7 +6,7 @@ const Index = () => {
   const [sourceList, setSourceList] = useState("");
   const [targetList, setTargetList] = useState("");
   const [isSearching, setIsSearching] = useState(false);
-  const [formula, setFormula] = useState("");
+  const [formulas, setFormulas] = useState([]);
   const toast = useToast();
 
   // Dummy function to simulate formula search
@@ -14,7 +14,8 @@ const Index = () => {
     setIsSearching(true);
     setTimeout(() => {
       // For demonstration, we pretend that the formula is always 'x * 2'
-      setFormula("x * 2");
+      // Simulating multiple formulas found
+      setFormulas(["x * 2", "x + 2", "2x - 1"]);
       setIsSearching(false);
       toast({
         title: "Formula found.",
@@ -43,12 +44,18 @@ const Index = () => {
         <Button leftIcon={<FaSearch />} colorScheme="teal" onClick={findFormula} isLoading={isSearching} loadingText="Searching">
           Find Formula
         </Button>
-        {formula && (
+        {formulas.length > 0 && (
           <Box>
             <Heading as="h3" size="md">
-              Transformation Formula:
+              Possible Formulas:
             </Heading>
-            <Text as="i">{formula}</Text>
+            <List styleType="disc">
+              {formulas.map((formula, index) => (
+                <ListItem key={index}>
+                  <Text as="i">{formula}</Text>
+                </ListItem>
+              ))}
+            </List>
           </Box>
         )}
         <Flex direction="column" align="center">
