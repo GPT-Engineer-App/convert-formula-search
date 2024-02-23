@@ -13,9 +13,11 @@ const Index = () => {
   const findFormula = () => {
     setIsSearching(true);
     setTimeout(() => {
-      // For demonstration, we pretend that the formula is always 'x * 2'
-      // Simulating multiple formulas found
-      setFormulas(["x * 2", "x + 2", "2x - 1", "sin(x)", "cos(x)", "x^2", "e^x"]);
+      // Simulate finding actual transformable formulas based on the source list
+      const sourceLength = sourceList.split(",").length;
+      const evenFormulas = ["x * 2", "x + 2"];
+      const oddFormulas = ["2x - 1", "sin(x)", "cos(x)", "x^2", "e^x"];
+      setFormulas(sourceLength % 2 === 0 ? evenFormulas : oddFormulas);
       setIsSearching(false);
       toast({
         title: "Formula found.",
