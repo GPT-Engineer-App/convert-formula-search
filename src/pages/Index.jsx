@@ -5,6 +5,7 @@ import { FaSearch } from "react-icons/fa";
 const Index = () => {
   const [sourceList, setSourceList] = useState("");
   const [targetList, setTargetList] = useState("");
+  const [operationCount, setOperationCount] = useState(10);
   const [isSearching, setIsSearching] = useState(false);
   const [formulas, setFormulas] = useState([]);
   const toast = useToast();
@@ -30,7 +31,7 @@ const Index = () => {
       const operands = ["2", "3", "1", "x", "Math.PI", "Math.E"];
       const formulasToTest = [];
 
-      for (let i = 0; i < 10; i++) {
+      for (let i = 0; i < operationCount; i++) {
         let randomFormula = `x ${operations[Math.floor(Math.random() * operations.length)]} ${operands[Math.floor(Math.random() * operands.length)]}`;
         if (operations[i] === "Math.pow") {
           randomFormula = `Math.pow(x, ${Math.floor(Math.random() * 3) + 1})`;
@@ -68,6 +69,10 @@ const Index = () => {
         <FormControl id="source-list" isRequired>
           <FormLabel>Source List (comma-separated numbers)</FormLabel>
           <Input placeholder="e.g. 1, 2, 3, 4" value={sourceList} onChange={(e) => setSourceList(e.target.value)} />
+        </FormControl>
+        <FormControl id="operation-count">
+          <FormLabel>Number of Operation Symbols (1-100)</FormLabel>
+          <Input type="number" placeholder="e.g. 10" value={operationCount} onChange={(e) => setOperationCount(Math.min(100, Math.max(1, e.target.value)))} min="1" max="100" />
         </FormControl>
         <FormControl id="target-list" isRequired>
           <FormLabel>Target List (comma-separated numbers)</FormLabel>
