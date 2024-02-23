@@ -9,20 +9,54 @@ const Index = () => {
   const [formulas, setFormulas] = useState([]);
   const toast = useToast();
 
-  // Dummy function to simulate formula search
+  const applyFormula = (x, formula) => {
+    // A simple utility function to apply a formula to a number x.
+    switch (formula) {
+      case "x * 2":
+        return x * 2;
+      case "x + 2":
+        return x + 2;
+      case "2x - 1":
+        return 2 * x - 1;
+      case "sin(x)":
+        return Math.sin(x);
+      case "cos(x)":
+        return Math.cos(x);
+      case "x^2":
+        return Math.pow(x, 2);
+      case "e^x":
+        return Math.exp(x);
+      default:
+        return x;
+    }
+  };
+
   const findFormula = () => {
     setIsSearching(true);
     setTimeout(() => {
-      // Simulate finding actual transformable formulas based on the source list
-      const sourceLength = sourceList.split(",").length;
-      const evenFormulas = ["x * 2", "x + 2"];
-      const oddFormulas = ["2x - 1", "sin(x)", "cos(x)", "x^2", "e^x"];
-      setFormulas(sourceLength % 2 === 0 ? evenFormulas : oddFormulas);
+      let successfulFormulas = [];
+      const sourceNumbers = sourceList.split(",").map(Number);
+      const targetNumbers = targetList.split(",").map(Number);
+      const formulasToTest = ["x * 2", "x + 2", "2x - 1", "sin(x)", "cos(x)", "x^2", "e^x"];
+
+      // Shuffle formulas to simulate random application
+      formulasToTest.sort(() => Math.random() - 0.5);
+
+      formulasToTest.forEach((formula) => {
+        const transformedNumbers = sourceNumbers.map((x) => applyFormula(x, formula));
+        // Check if transformed numbers match the target list
+        if (JSON.stringify(transformedNumbers) === JSON.stringify(targetNumbers)) {
+          successfulFormulas.push(formula);
+        }
+      });
+
+      setFormulas(successfulFormulas);
       setIsSearching(false);
+
       toast({
-        title: "Formula found.",
-        description: "We've calculated the formula for the transformation.",
-        status: "success",
+        title: successfulFormulas.length > 0 ? "Formulas found." : "No matching formulas found.",
+        description: successfulFormulas.length > 0 ? "We've calculated the formulas for the transformation." : "No formulas could transform the source list into the target list.",
+        status: successfulFormulas.length > 0 ? "success" : "error",
         duration: 5000,
         isClosable: true,
       });
