@@ -26,10 +26,17 @@ const Index = () => {
       let successfulFormulas = [];
       const sourceNumbers = sourceList.split(",").map(Number);
       const targetNumbers = targetList.split(",").map(Number);
-      const formulasToTest = ["x * 2", "x + 2", "x - 1", "x / 2", "(1/3) * x", "2x - 1", "sin(x)", "cos(x)", "x^2", "e^x", "sqrt(x)", "x / (1 + x)"];
+      const operations = ["*", "+", "-", "/", "Math.sin", "Math.cos", "Math.pow", "Math.sqrt", "Math.exp"];
+      const operands = ["2", "3", "1", "x", "Math.PI", "Math.E"];
+      const formulasToTest = [];
 
-      // Shuffle formulas to simulate random application
-      formulasToTest.sort(() => Math.random() - 0.5);
+      for (let i = 0; i < 10; i++) {
+        let randomFormula = `x ${operations[Math.floor(Math.random() * operations.length)]} ${operands[Math.floor(Math.random() * operands.length)]}`;
+        if (operations[i] === "Math.pow") {
+          randomFormula = `Math.pow(x, ${Math.floor(Math.random() * 3) + 1})`;
+        }
+        formulasToTest.push(randomFormula);
+      }
 
       formulasToTest.forEach((formula) => {
         const transformedNumbers = sourceNumbers.map((x) => applyFormula(x, formula));
