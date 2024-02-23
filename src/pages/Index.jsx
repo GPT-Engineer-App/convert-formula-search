@@ -10,24 +10,13 @@ const Index = () => {
   const toast = useToast();
 
   const applyFormula = (x, formula) => {
-    // A simple utility function to apply a formula to a number x.
-    switch (formula) {
-      case "x * 2":
-        return x * 2;
-      case "x + 2":
-        return x + 2;
-      case "2x - 1":
-        return 2 * x - 1;
-      case "sin(x)":
-        return Math.sin(x);
-      case "cos(x)":
-        return Math.cos(x);
-      case "x^2":
-        return Math.pow(x, 2);
-      case "e^x":
-        return Math.exp(x);
-      default:
-        return x;
+    // Evaluate the formula as a JavaScript expression
+    try {
+      const result = eval(formula.replace(/x/g, `(${x})`));
+      return Number.isFinite(result) ? result : x;
+    } catch (error) {
+      console.error("Error evaluating formula:", error);
+      return x;
     }
   };
 
