@@ -26,7 +26,7 @@ const Index = () => {
       let successfulFormulas = [];
       const sourceNumbers = sourceList.split(",").map(Number);
       const targetNumbers = targetList.split(",").map(Number);
-      const formulasToTest = ["x * 2", "x + 2", "2x - 1", "sin(x)", "cos(x)", "x^2", "e^x"];
+      const formulasToTest = ["x * 2", "x + 2", "x - 1", "x / 2", "(1/3) * x", "2x - 1", "sin(x)", "cos(x)", "x^2", "e^x", "sqrt(x)", "x / (1 + x)"];
 
       // Shuffle formulas to simulate random application
       formulasToTest.sort(() => Math.random() - 0.5);
