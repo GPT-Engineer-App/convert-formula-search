@@ -6,6 +6,7 @@ const Index = () => {
   const [sourceList, setSourceList] = useState("");
   const [targetList, setTargetList] = useState("");
   const [operationCount, setOperationCount] = useState(10);
+  const [operationSymbolsCount, setOperationSymbolsCount] = useState(1);
   const [isSearching, setIsSearching] = useState(false);
   const [formulas, setFormulas] = useState([]);
   const toast = useToast();
@@ -24,17 +25,24 @@ const Index = () => {
   const findFormula = () => {
     setIsSearching(true);
     setTimeout(() => {
-      let successfulFormulas = [];
+      let successfulFormulas = new Set();
       const sourceNumbers = sourceList.split(",").map(Number);
       const targetNumbers = targetList.split(",").map(Number);
       const operations = ["*", "+", "-", "/", "Math.sin", "Math.cos", "Math.pow", "Math.sqrt", "Math.exp"];
       const operands = ["2", "3", "1", "x", "Math.PI", "Math.E"];
       const formulasToTest = [];
 
+      // Generate random formulas based on the number of operation symbols specified
       for (let i = 0; i < operationCount; i++) {
-        let randomFormula = `x ${operations[Math.floor(Math.random() * operations.length)]} ${operands[Math.floor(Math.random() * operands.length)]}`;
-        if (operations[i] === "Math.pow") {
-          randomFormula = `Math.pow(x, ${Math.floor(Math.random() * 3) + 1})`;
+        let randomFormula = "x";
+        for (let j = 0; j < operationSymbolsCount; j++) {
+          const operation = operations[Math.floor(Math.random() * operations.length)];
+          const operand = operands[Math.floor(Math.random() * operands.length)];
+          randomFormula += ` ${operation} ${operand}`;
+          if (operation === "Math.pow") {
+            randomFormula += `, ${Math.floor(Math.random() * 3) + 1}`;
+            break; // Math.pow should only have one operand
+          }
         }
         formulasToTest.push(randomFormula);
       }
@@ -43,11 +51,11 @@ const Index = () => {
         const transformedNumbers = sourceNumbers.map((x) => applyFormula(x, formula));
         // Check if transformed numbers match the target list
         if (JSON.stringify(transformedNumbers) === JSON.stringify(targetNumbers)) {
-          successfulFormulas.push(formula);
+          successfulFormulas.add(formula);
         }
       });
 
-      setFormulas(successfulFormulas);
+      setFormulas(Array.from(successfulFormulas));
       setIsSearching(false);
 
       toast({
@@ -70,9 +78,9 @@ const Index = () => {
           <FormLabel>Source List (comma-separated numbers)</FormLabel>
           <Input placeholder="e.g. 1, 2, 3, 4" value={sourceList} onChange={(e) => setSourceList(e.target.value)} />
         </FormControl>
-        <FormControl id="operation-count">
-          <FormLabel>Number of Operation Symbols (1-100)</FormLabel>
-          <Input type="number" placeholder="e.g. 10" value={operationCount} onChange={(e) => setOperationCount(Math.min(100, Math.max(1, e.target.value)))} min="1" max="100" />
+        <FormControl id="operation-symbols-count">
+          <FormLabel>Number of Operation Symbols per Formula (1-5)</FormLabel>
+          <Input type="number" placeholder="e.g. 1" value={operationSymbolsCount} onChange={(e) => setOperationSymbolsCount(Math.min(5, Math.max(1, e.target.value)))} min="1" max="5" />
         </FormControl>
         <FormControl id="target-list" isRequired>
           <FormLabel>Target List (comma-separated numbers)</FormLabel>
